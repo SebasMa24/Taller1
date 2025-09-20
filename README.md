@@ -1,5 +1,7 @@
 # Taller 1: PR por CLI + Revisión por Pares + Projects + Actions
 
+## Estructura
+```
 Taller1/
 ├─ src/                      # Código fuente
 ├─ tests/                    # Pruebas básicas
