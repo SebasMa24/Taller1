@@ -55,4 +55,3 @@ function mostrarMensaje(mensaje, tipo = 'error', tiempo = tipo === 'error' ? 500
 function obtenerDatosFormulario(formElement) {
     return Object.fromEntries(new FormData(formElement));
 }
-});
