@@ -92,4 +92,25 @@ class TareaServiceTest {
         assertEquals(1, resultado.size());
         assertEquals("Tarea Semana 38", resultado.get(0).getTitulo());
     }
+
+    @Test
+    void eliminarTarea_debeEliminarSiExiste() {
+        Long id = 1L;
+
+        doNothing().when(tareaRepository).deleteById(id);
+
+        tareaService.eliminarTarea(id);
+
+        verify(tareaRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void eliminarTarea_noDebeFallarSiIdNoExiste() {
+        Long id = 99L;
+
+        doThrow(new RuntimeException("No existe")).when(tareaRepository).deleteById(id);
+
+        assertThrows(RuntimeException.class, () -> tareaService.eliminarTarea(id));
+        verify(tareaRepository, times(1)).deleteById(id);
+    }
 }

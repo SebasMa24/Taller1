@@ -17,6 +17,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 class TareaControllerTest {
 
@@ -75,4 +76,30 @@ class TareaControllerTest {
 
         verify(tareaService, times(1)).filtrarPorSemana(38);
     }
+
+    @Test
+    void eliminarTarea_debeRedirigirADespuesDeEliminar() throws Exception {
+        Long id = 1L;
+
+        doNothing().when(tareaService).eliminarTarea(id);
+
+        mockMvc.perform(post("/eliminar").param("id", id.toString()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        verify(tareaService, times(1)).eliminarTarea(id);
+    }
+
+    @Test
+    void eliminarTarea_siNoExisteDebeMostrarError() throws Exception {
+        Long id = 99L;
+
+        doThrow(new RuntimeException("Tarea no encontrada")).when(tareaService).eliminarTarea(id);
+
+        mockMvc.perform(post("/eliminar").param("id", id.toString()))
+                .andExpect(status().isInternalServerError());
+
+        verify(tareaService, times(1)).eliminarTarea(id);
+    }
+
 }

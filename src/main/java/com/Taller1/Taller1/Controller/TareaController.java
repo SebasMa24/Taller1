@@ -2,10 +2,15 @@ package com.Taller1.Taller1.Controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.Taller1.Taller1.Entity.Tarea;
 import com.Taller1.Taller1.Service.TareaService;
@@ -37,9 +42,15 @@ public class TareaController {
         return "index";
     }
 
-    @GetMapping("/eliminar")
-    public String eliminarTarea(@RequestParam Long id) {
-        tareaService.eliminarTarea(id);
-        return "redirect:/";
+   @RequestMapping(value = "/eliminar", method = {RequestMethod.GET, RequestMethod.POST})
+    public Object eliminarTarea(@RequestParam Long id) {
+        try {
+            tareaService.eliminarTarea(id);
+            return new RedirectView("/");
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: " + e.getMessage());
+        }
     }
 }
