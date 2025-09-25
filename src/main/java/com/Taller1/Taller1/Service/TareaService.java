@@ -44,4 +44,9 @@ public class TareaService {
                         t.getFechaVencimiento().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) == numeroSemana)
                 .toList();
     }
+
+    public void eliminarTarea(Long id) {
+    tareaRepository.deleteById(id);
+    }
+
 }

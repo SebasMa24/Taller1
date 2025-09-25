@@ -37,5 +37,9 @@ public class TareaController {
         return "index";
     }
 
-    
+    @GetMapping("/eliminar")
+    public String eliminarTarea(@RequestParam Long id) {
+        tareaService.eliminarTarea(id);
+        return "redirect:/";
+    }
 }
