@@ -38,6 +38,15 @@ public class Tarea{
     @Column
     private LocalDate fechaFinalizacion;
 
+    // Constructor sin fecha de finalizacion
+    public Tarea(Long id, String titulo, String descripcion, LocalDate fechaVencimiento, String estado) {
+        this.id = id;
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.fechaVencimiento = fechaVencimiento;
+        this.estado = estado;
+    }
+
     @Override
     public String toString() {
         return "Tarea{" +
