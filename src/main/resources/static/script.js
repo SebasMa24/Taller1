@@ -55,3 +55,17 @@ function mostrarMensaje(mensaje, tipo = 'error', tiempo = tipo === 'error' ? 500
 function obtenerDatosFormulario(formElement) {
     return Object.fromEntries(new FormData(formElement));
 }
+document.getElementById("form-editar-tarea").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    try {
+        const datosFormulario = obtenerDatosFormulario(e.target);
+
+        await fetchWithErrorHandling("/editar", "POST", datosFormulario);
+
+        mostrarMensaje("Tarea editada exitosamente!", "success");
+    } catch (error) {
+        mostrarMensaje(error.message);
+    }
+});
+
