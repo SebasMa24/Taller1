@@ -61,7 +61,7 @@ document.getElementById("form-tarea").addEventListener("submit", async function 
 
     try {
         const datosFormulario = obtenerDatosFormulario(e.target);
-        await fetchWithErrorHandling("/", "POST", datosFormulario);
+        await fetchWithErrorHandling("/tarea", "POST", datosFormulario);
         e.target.reset();
         mostrarMensaje("Tarea creada exitosamente!", "success");
     } catch (error) {

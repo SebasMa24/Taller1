@@ -42,7 +42,7 @@ public class TareaController {
         return "index";
     }
 
-    @PostMapping
+    @PostMapping("/tarea")
     public ResponseEntity<?> crearTarea(@RequestBody Tarea tareaNueva) {
         Tarea creada = tareaService.crearTarea(tareaNueva);
         return ResponseEntity.status(HttpStatus.CREATED).body(creada);
