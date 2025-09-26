@@ -1,1 +1,5 @@
-id,pr,archivo,linea,tipo,severidad,descripcion,estado,reportado_por,decidido_por,comentarios
+id,pr,archivo,linea,tipo,severidad,descripcion,estado,reportado_por
+DEF-001,6,src/main/java/com/Taller1/Taller1/Controller/TareaController.java,40,Seguridad,Media,"Usar @RequestMapping no es óptimo, se recomienda usar @PostMapping o @DeleteMapping.",Pendiente,Luis Sebastián Martínez Guerrero
+DEF-002,6,src/main/java/com/Taller1/Taller1/Controller/TareaController.java,42,Validación,Alta,"Validar que exista el registro antes de eliminarlo, ya que puede fallar si se prueba con Postman.",Pendiente,Luis Sebastián Martínez Guerrero
+DEF-003,6,src/main/resources/application.properties,##,Configuración,Alta,"No se debe editar directamente application.properties, mejor usar un .env personal.",Pendiente,Luis Sebastián Martínez Guerrero
+DEF-004,6,src/main/java/com/Taller1/Taller1/Controller/TareaController.java,47,Convenciones REST,Media,"El endpoint @PostMapping('/eliminar') no sigue las convenciones REST, debería ser @DeleteMapping('/tareas/{id}').",Pendiente,Miguel Angel Veloza Ortiz
