@@ -56,4 +56,57 @@ public class TareaService {
         }
     }
 
+  
+    // Editar una tarea existente (solo título, descripción y fecha de vencimiento)
+    public Tarea editarTarea(Long id, String titulo, String descripcion, LocalDate fechaVencimiento) {
+        System.out.println("Editando tarea con ID: " + id);
+        Tarea existente = tareaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Tarea no encontrada"));
+
+        if (titulo == null || titulo.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El título de la tarea no puede estar vacío");
+        }
+        if (titulo.length() > 100) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "El título de la tarea no puede exceder 100 caracteres");
+        }
+
+        existente.setTitulo(titulo);
+        existente.setDescripcion(descripcion);
+        existente.setFechaVencimiento(fechaVencimiento);
+
+        return tareaRepository.save(existente);
+    }
+
+    public Tarea crearTarea(Tarea tarea) {
+        if(tarea.getId() != null){
+            if (tareaRepository.existsById(tarea.getId())) {
+                throw new ResponseStatusException(HttpStatus.CONFLICT, "La tarea con ID " + tarea.getId() + " ya existe");
+            }
+        }
+        
+        if (tarea.getTitulo() == null || tarea.getTitulo().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El título de la tarea no puede estar vacío");
+        }
+        if (tarea.getTitulo().length() > 100) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "El título de la tarea no puede exceder 100 caracteres");
+        }
+        tarea.setEstado("PENDIENTE");
+        return tareaRepository.save(tarea);
+    }
+    // Actualizar estado tarea
+    public Tarea actualizarEstado(Long id, String nuevoEstado) {
+    Tarea tarea = tareaRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("Tarea no encontrada: " + id));
+
+    tarea.setEstado(nuevoEstado);
+
+    if ("COMPLETADA".equalsIgnoreCase(nuevoEstado)) {
+        tarea.setFechaFinalizacion(LocalDate.now());
+    } else {
+        tarea.setFechaFinalizacion(null); // si se desmarca
+    }
+
+    return tareaRepository.save(tarea);
+    }
 }
