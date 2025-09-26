@@ -102,8 +102,9 @@ class TareaServiceTest {
         assertEquals("Tarea Semana 38", resultado.get(0).getTitulo());
     }
 
-    @Test
+   @Test
 void editarTarea_existente_debeActualizarCampos() {
+    Tarea tarea = new Tarea(1L, "Original", "Desc", LocalDate.now(), "PENDIENTE");
     LocalDate nuevaFecha = LocalDate.now().plusDays(3);
     when(tareaRepository.findById(1L)).thenReturn(Optional.of(tarea));
     when(tareaRepository.save(any(Tarea.class))).thenReturn(tarea);
@@ -120,53 +121,52 @@ void editarTarea_existente_debeActualizarCampos() {
 void editarTarea_inexistente_debeLanzarNotFound() {
     when(tareaRepository.findById(99L)).thenReturn(Optional.empty());
 
-    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-        tareaService.editarTarea(99L, "Título", "Desc", LocalDate.now());
-    });
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+            () -> tareaService.editarTarea(99L, "Título", "Desc", LocalDate.now()));
 
-    assertEquals("Tarea no encontrada", exception.getReason());
+    assertEquals("Tarea no encontrada", ex.getReason());
     verify(tareaRepository, never()).save(any());
 }
 
 @Test
 void editarTarea_conTituloVacio_debeLanzarBadRequest() {
+    Tarea tarea = new Tarea(1L, "Original", "Desc", LocalDate.now(), "PENDIENTE");
     when(tareaRepository.findById(1L)).thenReturn(Optional.of(tarea));
 
-    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-        tareaService.editarTarea(1L, "", "Desc", LocalDate.now());
-    });
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+            () -> tareaService.editarTarea(1L, "", "Desc", LocalDate.now()));
 
-    assertEquals("El título de la tarea no puede estar vacío", exception.getReason());
+    assertEquals("El título de la tarea no puede estar vacío", ex.getReason());
     verify(tareaRepository, never()).save(any());
 }
 
 @Test
 void editarTarea_conTituloNull_debeLanzarBadRequest() {
+    Tarea tarea = new Tarea(1L, "Original", "Desc", LocalDate.now(), "PENDIENTE");
     when(tareaRepository.findById(1L)).thenReturn(Optional.of(tarea));
 
-    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-        tareaService.editarTarea(1L, null, "Desc", LocalDate.now());
-    });
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+            () -> tareaService.editarTarea(1L, null, "Desc", LocalDate.now()));
 
-    assertEquals("El título de la tarea no puede estar vacío", exception.getReason());
+    assertEquals("El título de la tarea no puede estar vacío", ex.getReason());
     verify(tareaRepository, never()).save(any());
 }
 
 @Test
 void editarTarea_conTituloMuyLargo_debeLanzarBadRequest() {
-    String tituloLargo = "A".repeat(101);
+    Tarea tarea = new Tarea(1L, "Original", "Desc", LocalDate.now(), "PENDIENTE");
     when(tareaRepository.findById(1L)).thenReturn(Optional.of(tarea));
 
-    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
-        tareaService.editarTarea(1L, tituloLargo, "Desc", LocalDate.now());
-    });
+    ResponseStatusException ex = assertThrows(ResponseStatusException.class,
+            () -> tareaService.editarTarea(1L, "A".repeat(101), "Desc", LocalDate.now()));
 
-    assertEquals("El título de la tarea no puede exceder 100 caracteres", exception.getReason());
+    assertEquals("El título de la tarea no puede exceder 100 caracteres", ex.getReason());
     verify(tareaRepository, never()).save(any());
 }
 
 @Test
 void editarTarea_sinDescripcion_debeActualizarCorrectamente() {
+    Tarea tarea = new Tarea(1L, "Original", "Desc", LocalDate.now(), "PENDIENTE");
     LocalDate nuevaFecha = LocalDate.now().plusDays(2);
     when(tareaRepository.findById(1L)).thenReturn(Optional.of(tarea));
     when(tareaRepository.save(any(Tarea.class))).thenReturn(tarea);
