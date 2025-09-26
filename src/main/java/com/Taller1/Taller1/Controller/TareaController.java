@@ -1,13 +1,15 @@
 package com.Taller1.Taller1.Controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.Taller1.Taller1.Entity.Tarea;
@@ -40,20 +42,15 @@ public class TareaController {
         return "index";
     }
 
-    @PostMapping("/editar")
-public ResponseEntity<?> editarTarea(@RequestBody Tarea tarea) {
-    if (tarea.getId() == null) {
-        return ResponseEntity.badRequest().body("El ID es obligatorio para editar una tarea");
-    }
+    @PutMapping("/tareas/{id}")
+public ResponseEntity<?> editarTarea(
+        @PathVariable long id,
+        @RequestParam String titulo,
+        @RequestParam String descripcion,
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaVencimiento) {
 
-    Tarea actualizada = tareaService.editarTarea(
-            tarea.getId(),
-            tarea.getTitulo(),
-            tarea.getDescripcion(),
-            tarea.getFechaVencimiento()
-    );
-
-    return ResponseEntity.ok(actualizada);
+    Tarea tareaEditada = tareaService.editarTarea(id, titulo, descripcion, fechaVencimiento);
+    return ResponseEntity.ok(tareaEditada);
 }
 
 
