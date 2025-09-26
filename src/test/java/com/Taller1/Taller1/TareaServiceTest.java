@@ -13,6 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
 
 // JUnit Assertions
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -21,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // Mockito
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -206,6 +209,27 @@ class TareaServiceTest {
     }
 
     @Test
+    void eliminarTarea_debeEliminarSiExiste() {
+        Long id = 1L;
+
+        when(tareaRepository.existsById(id)).thenReturn(true);
+        doNothing().when(tareaRepository).deleteById(id);
+
+        tareaService.eliminarTarea(id);
+
+        verify(tareaRepository, times(1)).deleteById(id);
+    }
+
+    @Test
+    void eliminarTarea_noDebeFallarSiIdNoExiste() {
+        Long id = 99L;
+
+        when(tareaRepository.findById(id)).thenReturn(Optional.empty());
+
+        assertThrows(ResponseStatusException.class, () -> tareaService.eliminarTarea(id));
+
+        verify(tareaRepository, never()).deleteById(anyLong());
+        }
     void editarTarea_existente_debeActualizarCampos() {
         Tarea tarea = new Tarea(1L, "Original", "Desc", LocalDate.now(), "PENDIENTE");
         LocalDate nuevaFecha = LocalDate.now().plusDays(3);

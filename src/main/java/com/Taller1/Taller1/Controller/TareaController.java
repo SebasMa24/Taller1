@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.Taller1.Taller1.Entity.Tarea;
 import com.Taller1.Taller1.Service.TareaService;
@@ -64,7 +65,17 @@ public class TareaController {
         Tarea tareaEditada = tareaService.editarTarea(id, titulo, descripcion, fechaVencimiento);
         return ResponseEntity.ok(tareaEditada);
     }
-
+    @PostMapping("/eliminar")
+    public Object eliminarTarea(@RequestParam Long id) {
+        try {
+            tareaService.eliminarTarea(id);
+            return new RedirectView("/");
+        } catch (RuntimeException e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error: " + e.getMessage());
+        }
+    }
     @PostMapping("/tareas/{id}/estado")
     public String cambiarEstado(@PathVariable Long id,
                                 @RequestParam String estado) {
@@ -72,3 +83,4 @@ public class TareaController {
         return "redirect:/"; // redirige a la lista principal
     }  
 }
+

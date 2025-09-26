@@ -16,6 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 // Mockito
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -30,6 +32,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 // Spring MockMvc
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -43,6 +46,7 @@ import org.springframework.web.server.ResponseStatusException;
 import com.Taller1.Taller1.Controller.TareaController;
 import com.Taller1.Taller1.Entity.Tarea;
 import com.Taller1.Taller1.Service.TareaService;
+
 
 class TareaControllerTest {
 
@@ -205,6 +209,31 @@ class TareaControllerTest {
                 .andExpect(model().attribute("tareas", List.of(tarea)));
 
         verify(tareaService, times(1)).filtrarPorSemana(38);
+    }
+
+    @Test
+    void eliminarTarea_debeRedirigirADespuesDeEliminar() throws Exception {
+        Long id = 1L;
+
+        doNothing().when(tareaService).eliminarTarea(id);
+
+        mockMvc.perform(post("/eliminar").param("id", id.toString()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        verify(tareaService, times(1)).eliminarTarea(id);
+    }
+
+    @Test
+    void eliminarTarea_siNoExisteDebeMostrarError() throws Exception {
+        Long id = 99L;
+
+        doThrow(new RuntimeException("Tarea no encontrada")).when(tareaService).eliminarTarea(id);
+
+        mockMvc.perform(post("/eliminar").param("id", id.toString()))
+                .andExpect(status().isInternalServerError());
+
+        verify(tareaService, times(1)).eliminarTarea(id);
     }
 
     // -------------------------

@@ -46,6 +46,16 @@ public class TareaService {
                         t.getFechaVencimiento().get(IsoFields.WEEK_OF_WEEK_BASED_YEAR) == numeroSemana)
                 .toList();
     }
+
+    public void eliminarTarea(Long id) {
+        if (tareaRepository.existsById(id)) {
+            tareaRepository.deleteById(id);
+        } else {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "La tarea con ID " + id + " no existe");
+        }
+    }
+
   
     // Editar una tarea existente (solo título, descripción y fecha de vencimiento)
     public Tarea editarTarea(Long id, String titulo, String descripcion, LocalDate fechaVencimiento) {
