@@ -38,6 +38,7 @@ public class TareaController {
             tareas = tareaService.obtenerTodas();
         }
 
+        model.addAttribute("tareaEditar",new Tarea());
         model.addAttribute("tareas", tareas);
         return "index";
     }
