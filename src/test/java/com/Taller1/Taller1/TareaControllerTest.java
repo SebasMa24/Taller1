@@ -153,7 +153,7 @@ class TareaControllerTest {
         ResponseEntity<?> response = tareaController.crearTarea(tarea);
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("COMPLETADA", ((Tarea) response.getBody()).getEstado());
+        assertEquals("PENDIENTE", ((Tarea) response.getBody()).getEstado());
     }
 
     @Test
