@@ -48,8 +48,15 @@ jobs:
       - name: SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn sonar:sonar -Dsonar.projectKey=SebasMa24_Taller1 -Dsonar.sources=src/main/java -Dsonar.plsql.database-dictionary=src/main/resources/db-dictionary.sql -Dsonar.coverage.exclusions=*/resources/static/,/resources/templates/*
-        
+        run: |
+            mvn sonar:sonar \
+              -Dsonar.projectKey=SebasMa24_Taller1 \
+              -Dsonar.organization=sebasma24 \
+              -Dsonar.host.url=https://sonarcloud.io \
+              -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+              -Dsonar.sources=src/main/java \
+              -Dsonar.coverage.exclusions=*/resources/static/,/resources/templates/*
+              
       - name: Package JAR
         run: mvn clean package -DskipTest
       
@@ -89,6 +96,7 @@ jobs:
           package: '*.jar'
 
           
+
 
 
 
