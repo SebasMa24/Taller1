@@ -95,6 +95,7 @@ jobs:
         with:
           app-name: ${{ env.AZURE_APP_NAME }}
           slot-name: ${{ env.SLOT_NAME }}
-          package: target/*.jar
+          package: '*.jar'
+
 
 
