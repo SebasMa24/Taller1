@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
-public class TareaSteps {
+public class HU_1CrearTareaSteps {
 
     @LocalServerPort
     private int port;
