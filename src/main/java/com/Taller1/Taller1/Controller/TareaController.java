@@ -2,6 +2,7 @@ package com.Taller1.Taller1.Controller;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -58,7 +59,7 @@ public class TareaController {
         model.addAttribute("estado", estado != null ? estado : ""); // 🔹 para mantener filtro
         return "index";
     }
-  
+
     @PostMapping("/tarea")
     public ResponseEntity<?> crearTarea(@RequestBody Tarea tareaNueva) {
         Tarea creada = tareaService.crearTarea(tareaNueva);
@@ -81,7 +82,7 @@ public class TareaController {
         System.out.println("Tarea editada: " + tareaEditada);
         return ResponseEntity.ok(tareaEditada);
     }
-    
+
     @PostMapping("/eliminar")
     public Object eliminarTarea(@RequestParam Long id) {
         try {
@@ -93,17 +94,29 @@ public class TareaController {
                     .body("Error: " + e.getMessage());
         }
     }
+
     @PostMapping("/tareas/{id}/estado")
     public String cambiarEstado(@PathVariable Long id,
-                                @RequestParam String estado) {
+            @RequestParam String estado) {
         tareaService.actualizarEstado(id, estado);
         return "redirect:/"; // redirige a la lista principal
-    }  
-    //Buscar tarea
+    }
+
+    // Buscar tarea
     @GetMapping("/tareas/buscar")
     @ResponseBody
-    public List<Tarea> buscarTareas(@RequestParam(required = false, defaultValue = "") String texto) {
-        return tareaService.buscarPorTitulo(texto);
+    public Map<String, Object> buscarTareas(@RequestParam(required = false, defaultValue = "") String texto) {
+
+        List<Tarea> tareas = (texto == null || texto.isBlank())
+                ? tareaService.obtenerTodas()
+                : tareaService.buscarPorTitulo(texto.trim());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("tareas", tareas);
+        response.put("recordatorioProximo", tareaService.calcularRecordatorioProximoMap(tareas));
+        response.put("recordatorioFormat", tareaService.calcularRecordatorioFormateado(tareas));
+        response.put("estadoVisual", tareaService.calcularEstadoVisual(tareas));
+
+        return response;
     }
 }
-

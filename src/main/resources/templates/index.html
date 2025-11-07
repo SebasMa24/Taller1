@@ -27,20 +27,25 @@
 
         <div>
           <label for="titulo" class="block text-gray-700 font-medium mb-1">Título</label>
-          <input type="text" id="titulo" name="titulo" 
+          <input type="text" id="titulo" name="titulo"
             class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-400" required />
         </div>
 
         <div>
           <label for="descripcion" class="block text-gray-700 font-medium mb-1">Descripción</label>
-          <textarea id="descripcion" name="descripcion" 
+          <textarea id="descripcion" name="descripcion"
             class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-400"></textarea>
         </div>
 
         <div>
           <label for="fechaVencimiento" class="block text-gray-700 font-medium mb-1">Fecha de Vencimiento</label>
-          <input type="date" id="fechaVencimiento" name="fechaVencimiento" 
+          <input type="date" id="fechaVencimiento" name="fechaVencimiento"
             class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-400" required />
+        </div>
+        <div>
+          <label for="recordatorio" class="block text-gray-700 font-medium mb-1">Recordatorio</label>
+          <input type="datetime-local" id="recordatorio" name="recordatorio"
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-blue-400" />
         </div>
 
         <div class="flex justify-end space-x-2">
@@ -65,7 +70,8 @@
         <div>
           <label for="titulo" class="block text-gray-700 font-medium mb-1">Título</label>
           <input type="text" id="titulo" name="titulo" th:field="*{titulo}" placeholder="Título de la tarea"
-            class="w-full text-ellipsis border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required/>
+            class="w-full text-ellipsis border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required />
         </div>
 
         <div>
@@ -77,38 +83,38 @@
         <div>
           <label for="fechaVencimiento" class="block text-gray-700 font-medium mb-1">Fecha de Vencimiento</label>
           <input type="date" id="fechaVencimiento" name="fechaVencimiento" th:field="*{fechaVencimiento}"
-            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required/>
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            required />
         </div>
+        <div>
+          <label for="recordatorio" class="block text-gray-700 font-medium mb-1">Recordatorio (opcional)</label>
+          <input type="datetime-local" id="recordatorio" name="recordatorio" th:field="*{recordatorio}"
+            class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        </div>
+
 
         <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
           Agregar tarea
         </button>
       </form>
     </section>
-    
 
 
-<!-- Barra de búsqueda -->
-<section class="bg-white rounded-lg shadow-md p-6 mb-6">
-  <h2 class="text-xl font-semibold mb-4">Buscar Tareas</h2>
-  <div class="flex gap-3">
-    <input 
-      type="text" 
-      id="busqueda-input" 
-      placeholder="Buscar por título..."
-      class="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-    />
-    <button 
-      id="limpiar-busqueda"
-      class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition"
-    >
-      Limpiar
-    </button>
-  </div>
-  <p id="mensaje-busqueda" class="text-gray-500 text-sm mt-2 hidden"></p>
-</section>
 
-<!-- Fin Barra Busqueda -->
+    <!-- Barra de búsqueda -->
+    <section class="bg-white rounded-lg shadow-md p-6 mb-6">
+      <h2 class="text-xl font-semibold mb-4">Buscar Tareas</h2>
+      <div class="flex gap-3">
+        <input type="text" id="busqueda-input" placeholder="Buscar por título..."
+          class="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <button id="limpiar-busqueda" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition">
+          Limpiar
+        </button>
+      </div>
+      <p id="mensaje-busqueda" class="text-gray-500 text-sm mt-2 hidden"></p>
+    </section>
+
+    <!-- Fin Barra Busqueda -->
 
     <!-- Listado de tareas -->
 
@@ -121,8 +127,8 @@
         <form method="get" action="/" class="flex items-center space-x-2">
           <label for="estado" class="font-medium text-gray-700">Filtrar por estado:</label>
           <select id="estado" name="estado"
-                  class="border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-400"
-                  onchange="this.form.submit()">
+            class="border border-gray-300 rounded px-2 py-1 focus:ring-2 focus:ring-blue-400"
+            onchange="this.form.submit()">
             <option value="" th:selected="${estado == null or estado == ''}">Todos</option>
             <option value="PENDIENTE" th:selected="${estado == 'PENDIENTE'}">Pendientes</option>
             <option value="EN_PROGRESO" th:selected="${estado == 'EN_PROGRESO'}">En progreso</option>
@@ -138,25 +144,28 @@
 
       <!-- Listado de tareas -->
       <div th:if="${!#lists.isEmpty(tareas)}" class="space-y-4">
-        <div th:each="tarea : ${tareas}" 
-             class="bg-white shadow-md rounded-lg p-4 border border-gray-200"
-             th:classappend="${tarea.estado == 'COMPLETADA'} ? ' opacity-60 line-through' : ''">
+        <div th:each="tarea : ${tareas}" class="bg-white shadow-md rounded-lg p-4 border border-gray-200"
+          th:classappend="${tarea.estado == 'COMPLETADA'} ? ' opacity-60 line-through' : ''">
 
           <div class="flex justify-between items-start">
             <!-- Información de la tarea -->
             <div class="flex-1">
               <h3 class="text-lg font-semibold text-gray-800" th:text="${tarea.titulo}">Título</h3>
               <p class="text-gray-600 text-sm mt-1" th:text="${tarea.descripcion}">Descripción</p>
-              <p class="text-xs text-gray-500 mt-2" th:text="${#temporals.format(tarea.fechaVencimiento, 'dd/MM/yyyy')}">20/09/2025</p>
+              <p class="text-xs text-gray-500 mt-2"
+                th:text="${#temporals.format(tarea.fechaVencimiento, 'dd/MM/yyyy')}">20/09/2025</p>
+              <span th:if="${recordatorioFormat[tarea.id] != null}"
+                th:classappend="${recordatorioProximo[tarea.id]} ? 'bg-red-100 text-red-700 text-xs px-2 py-1 rounded-full' : 'bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full'"
+                th:text="'⏰ ' + ${recordatorioFormat[tarea.id]}">
+              </span>
             </div>
 
             <!-- Acciones -->
             <div class="flex flex-col items-end space-y-2 ml-4">
               <!-- Cambiar estado -->
               <form th:action="@{'/tareas/' + ${tarea.id} + '/estado'}" method="post">
-                <select name="estado" onchange="this.form.submit()"
-                        class="px-2 py-1 border rounded text-sm"
-                        th:classappend="${tarea.estado == 'COMPLETADA' ? ' bg-green-100 text-green-800' : (tarea.estado == 'PENDIENTE' ? ' bg-red-100 text-red-800' : ' bg-yellow-100 text-yellow-800')}">
+                <select name="estado" onchange="this.form.submit()" class="px-2 py-1 border rounded text-sm"
+                  th:classappend="${tarea.estado == 'COMPLETADA' ? ' bg-green-100 text-green-800' : (tarea.estado == 'PENDIENTE' ? ' bg-red-100 text-red-800' : ' bg-yellow-100 text-yellow-800')}">
                   <option value="PENDIENTE" th:selected="${tarea.estado == 'PENDIENTE'}">Pendiente</option>
                   <option value="EN_PROGRESO" th:selected="${tarea.estado == 'EN_PROGRESO'}">En Progreso</option>
                   <option value="COMPLETADA" th:selected="${tarea.estado == 'COMPLETADA'}">Completada</option>
@@ -167,15 +176,14 @@
               <!-- Botones editar / eliminar -->
               <div class="flex space-x-2">
                 <button type="button"
-                        class="edit-btn bg-orange-500 hover:bg-orange-600 text-white text-xs px-3 py-1 rounded shadow"
-                        th:data-id="${tarea.id}"
-                        th:data-titulo="${tarea.titulo}"
-                        th:data-descripcion="${tarea.descripcion}"
-                        th:data-fecha="${tarea.fechaVencimiento}">
+                  class="edit-btn bg-orange-500 hover:bg-orange-600 text-white text-xs px-3 py-1 rounded shadow"
+                  th:data-id="${tarea.id}" th:data-titulo="${tarea.titulo}" th:data-descripcion="${tarea.descripcion}"
+                  th:data-fecha="${tarea.fechaVencimiento}" th:data-recordatorio="${tarea.recordatorio}">
                   Editar
                 </button>
 
-                <form th:action="@{/eliminar}" method="post" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta tarea?')">
+                <form th:action="@{/eliminar}" method="post"
+                  onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta tarea?')">
                   <input type="hidden" name="id" th:value="${tarea.id}" />
                   <button type="submit" class="bg-red-500 hover:bg-red-600 text-white text-xs px-3 py-1 rounded shadow">
                     Eliminar
@@ -193,8 +201,14 @@
   <footer class="bg-gray-800 text-gray-300 text-center py-4 mt-6">
     <small>© <span th:text="${#dates.format(#dates.createNow(),'yyyy')}">2025</span> Gestor de Tareas</small>
   </footer>
-
+  <div id="error-popup" class="hidden fixed top-4 right-4 px-4 py-2 rounded shadow-lg z-50"></div>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    // Inyecta las tareas completas (asegúrate model contiene 'tareas')
+    window._TASKS_FROM_SERVER = /*[[${tareas}]]*/[];
+    /*]]>*/
+  </script>
   <script th:src="@{/script.js}"></script>
 </body>
-</html>
 
+</html>
