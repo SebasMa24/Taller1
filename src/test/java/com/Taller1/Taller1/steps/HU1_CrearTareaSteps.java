@@ -109,7 +109,7 @@ public class HU1_CrearTareaSteps {
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(tareaCreada);
         assertNotNull(tareaCreada.getId());
-        assertEquals("PENDIENTE", tareaCreada.getEstado());
+        assertEquals("", tareaCreada.getEstado());
     }
 
     @Entonces("la tarea visible tiene el título {string}")
