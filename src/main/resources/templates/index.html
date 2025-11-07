@@ -61,7 +61,7 @@
     <!-- Formulario para agregar tarea -->
     <section class="bg-white rounded-lg shadow-md p-6 mb-6">
       <h2 class="text-xl font-semibold mb-4">Agregar Nueva Tarea</h2>
-      <form th:object="${tareaNueva}" th:action="@{/guardar}" method="post" class="space-y-4">
+      <form id="form-tarea" th:object="${tareaNueva}" th:action="@{/guardar}" method="post" class="space-y-4">
         <div>
           <label for="titulo" class="block text-gray-700 font-medium mb-1">Título</label>
           <input type="text" id="titulo" name="titulo" th:field="*{titulo}" placeholder="Título de la tarea"
